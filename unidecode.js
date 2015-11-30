@@ -15,12 +15,15 @@
 
 var tr = {};
 var utf8_rx = /(?![\x00-\x7F]|[\xC0-\xDF][\x80-\xBF]|[\xE0-\xEF][\x80-\xBF]{2}|[\xF0-\xF7][\x80-\xBF]{3})./g;
-
+// Except arabic cahracters
+var exceptArabic = /[\u0600-\u06FF]/g;
 module.exports = function (str) {
   return str.replace(utf8_rx, unidecode_internal_replace);
 };
 
 function unidecode_internal_replace(match) {
+  if(match.match(exceptArabic)) return match;
+
   var utf16 = utf8_to_utf16(match);
 
   if (utf16 > 0xFFFF) {
